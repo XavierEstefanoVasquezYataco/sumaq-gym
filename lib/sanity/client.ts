@@ -1,4 +1,5 @@
 import { client } from '@/sanity/lib/client'
+import { isSanityConfigured } from '@/sanity/env'
 import {
   PROMOTIONS_QUERY,
   CLASSES_QUERY,
@@ -25,6 +26,7 @@ export { client }
  * Maneja errores retornando un arreglo vacío sin romper la app.
  */
 export async function getPromotions(): Promise<Promocion[]> {
+  if (!isSanityConfigured) return []
   try {
     const data = await client.fetch<Promocion[]>(PROMOTIONS_QUERY)
     return data || []
@@ -35,6 +37,7 @@ export async function getPromotions(): Promise<Promocion[]> {
 }
 
 export async function getClasses(): Promise<Clase[]> {
+  if (!isSanityConfigured) return []
   try {
     const data = await client.fetch<Clase[]>(CLASSES_QUERY)
     return data || []
@@ -45,6 +48,7 @@ export async function getClasses(): Promise<Clase[]> {
 }
 
 export async function getPlans(): Promise<Plan[]> {
+  if (!isSanityConfigured) return []
   try {
     const data = await client.fetch<Plan[]>(PLANS_QUERY)
     return data || []
@@ -55,6 +59,7 @@ export async function getPlans(): Promise<Plan[]> {
 }
 
 export async function getTrainers(): Promise<Entrenador[]> {
+  if (!isSanityConfigured) return []
   try {
     const data = await client.fetch<Entrenador[]>(TRAINERS_QUERY)
     return data || []
@@ -65,6 +70,7 @@ export async function getTrainers(): Promise<Entrenador[]> {
 }
 
 export async function getTestimonials(): Promise<Testimonio[]> {
+  if (!isSanityConfigured) return []
   try {
     const data = await client.fetch<Testimonio[]>(TESTIMONIALS_QUERY)
     return data || []
@@ -75,6 +81,7 @@ export async function getTestimonials(): Promise<Testimonio[]> {
 }
 
 export async function getSchedule(): Promise<Horario[]> {
+  if (!isSanityConfigured) return []
   try {
     const data = await client.fetch<Horario[]>(SCHEDULE_QUERY)
     return data || []
@@ -85,6 +92,7 @@ export async function getSchedule(): Promise<Horario[]> {
 }
 
 export async function getSettings(): Promise<AjustesGenerales | null> {
+  if (!isSanityConfigured) return null
   try {
     const data = await client.fetch<AjustesGenerales | null>(SETTINGS_QUERY)
     return data || null
