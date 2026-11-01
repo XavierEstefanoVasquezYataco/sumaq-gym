@@ -1,168 +1,120 @@
 # Sumaq Center Gym - Plataforma Web Oficial
 
-Sitio web y plataforma digital para **Sumaq Center Gym**, ubicado en Jirón Callao 126, Cercado de Lima. Construido con Next.js 16 (App Router), React 19, Tailwind CSS v4, Sanity Studio v5 y OpenStreetMap (Leaflet).
+Plataforma web y prototipo digital para **Sumaq Center Gym**, centro de acondicionamiento físico y musculación ubicado en Jirón Callao 126, Cercado de Lima.
+
+El proyecto está desarrollado con Next.js 16 (App Router), React 19, Tailwind CSS v4, Sanity Studio v5 y OpenStreetMap (Leaflet).
 
 ---
 
-## 📋 Resumen del Proyecto y Estado Actual
+## 🎯 Objetivo y Estado Actual
 
-El proyecto se encuentra en estado de **Prototipo de Demostración Controlado** (`NEXT_PUBLIC_IS_DEMO="true"`), preparado para ser presentado a los interesados comerciales y posteriormente desplegado en Netlify o conectado a un dominio propio.
-
-### Estado de los Datos Comerciales
-
-| Elemento | Estado Actual | Comportamiento en la Aplicación |
-| :--- | :--- | :--- |
-| **Ubicación exacta y coordenadas** | ⏳ *Pendiente de pin confirmado* | Mapa Leaflet configurado con OpenStreetMap mostrando encuadre del Centro de Lima sin marcador engañoso. Enlace externo configurado como búsqueda en Google Maps. Navegación Waze desactivada. |
-| **Teléfono / WhatsApp** | ⏳ *Pendiente de línea oficial* | Enlaces externos de WhatsApp desactivados para evitar envíos a números no verificados. Los botones actúan como acción interna accesible guiando a `/ubicacion`. |
-| **Planes, Precios y Beneficios** | 🏷️ *Datos de Demostración* | Precios y servicios identificados discretamente con etiqueta `[DEMO]`. Centralizados en `lib/data/site-data.ts`. |
-| **Horarios de Atención** | 🕒 *Informativos* | Ubicados exclusivamente en el pie de página (`Footer`), accesibles desde todas las páginas sin sobrecargar la vista principal. |
-| **Indexación en Buscadores (SEO)** | 🔒 *Bloqueada preventivamente* | Etiqueta `noindex, nofollow` activa globalmente y `robots.txt` en `Disallow: /` para evitar indexar datos provisionales. |
+- **Estado**: Prototipo navegable para revisión y validación de diseño y contenidos con los interesados.
+- **Modo Demostración Activo**: Opera con `NEXT_PUBLIC_IS_DEMO="true"`, mostrando un cintillo informativo en la interfaz, aplicando `noindex, nofollow` para evitar la indexación en motores de búsqueda y empleando datos de muestra claramente identificados.
+- **URL de Demostración**: Pendiente de despliegue remoto en Netlify; actualmente no existe una URL pública desplegada ni comprobada.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Tecnologías y Versiones Comprobadas
 
-- **Framework**: [Next.js 16.4.3](https://nextjs.org/) (App Router, Turbopack)
-- **Biblioteca UI**: [React 19.3.0](https://react.dev/)
-- **Estilos**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Iconografía**: [Lucide React](https://lucide.dev/)
-- **Animaciones**: [Framer Motion](https://www.framer.com/motion/)
-- **CMS / Panel de Administración**: [Sanity v5](https://www.sanity.io/) (`/studio`)
-- **Mapas**: [Leaflet](https://leafletjs.com/) + teselas oficiales de [OpenStreetMap](https://www.openstreetmap.org/)
-- **Testing**: [Vitest](https://vitest.dev/) (31 pruebas unitarias para calculadoras y validaciones)
-- **Tipado**: [TypeScript 5](https://www.typescriptlang.org/)
+A continuación se detallan las versiones declaradas en `package.json` y las efectivamente resueltas e instaladas en `package-lock.json` / `node_modules`:
 
----
-
-## 🗺️ Estructura de Rutas y Páginas
-
-```text
-app/
-├── page.tsx                           # / -> Página de Inicio (Hero de impacto, servicios clave, llamada a la acción)
-├── planes/page.tsx                    # /planes -> Membresías, promociones, clases grupales y beneficios
-├── ubicacion/page.tsx                 # /ubicacion -> Mapa OpenStreetMap, dirección, datos de contacto y privacidad
-├── calculadoras/page.tsx              # /calculadoras -> Calculadoras interactivas de salud y fitness
-├── studio/[[...tool]]/page.tsx        # /studio -> Sanity Studio CMS embebido
-├── robots.ts                          # Control dinámico de rastreo según entorno (demo vs producción)
-├── sitemap.ts                         # Generación automática de sitemap XML (excluye /studio)
-└── layout.tsx                         # Layout raíz con Navbar, Footer y banner de estado demo
-```
+| Dependencia | Versión Declarada (`package.json`) | Versión Instalada (`package-lock.json`) | Rol en el Proyecto |
+| :--- | :--- | :--- | :--- |
+| **Next.js** | `16.4.3` | `16.4.3` | Framework de React con App Router y Turbopack |
+| **React** | `19.3.0` | `19.3.0` | Biblioteca de interfaz de usuario |
+| **React DOM** | `19.3.0` | `19.3.0` | Renderizado para navegador de React |
+| **Tailwind CSS** | `@tailwindcss/turbopack: ^4` | `4.3.3` (Tailwind `4.3.3`) | Motor de estilos utilitarios |
+| **Sanity** | `^5.31.2` | `5.31.2` | CMS Headless y panel Studio (*versión 5.x instalada; no v6*) |
+| **next-sanity** | `^13.4.0` | `13.4.0` | Integración de Sanity para Next.js App Router |
+| **@sanity/vision** | `^5.31.2` | `5.31.2` | Herramienta de pruebas GROQ dentro del Studio |
+| **@sanity/image-url** | `^2.1.1` | `2.1.1` | Generación de URLs de imágenes para Sanity |
+| **Leaflet** | `^1.9.4` | `1.9.4` | Biblioteca de mapas interactivos |
+| **@types/leaflet** | `^1.9.22` | `1.9.22` | Tipos TypeScript para Leaflet |
+| **Lucide React** | `^1.66.0` | `1.66.0` | Iconografía vectorial |
+| **Framer Motion** | `^14.9.0` | `14.9.0` | Animaciones de interfaz |
+| **Styled Components** | `^6.6.0` | `6.6.0` | Requisito de renderizado para Sanity Studio |
+| **TypeScript** | `^5` | `5.9.3` | Tipado estático y compilación |
+| **ESLint** | `^9` | `9.39.5` | Análisis estático de código |
 
 ---
 
-## 🧮 Herramientas de Cálculo y Base Científica
+## 💻 Requisitos del Sistema y Runtime
 
-La sección `/calculadoras` incluye 3 herramientas nativas con validación de entradas y rangos biológicos seguros:
-
-1. **Gasto Energético Total Diario (TDEE)**:
-   - **Método**: Ecuación de Katch-McArdle basada en Masa Magra Corporal (LBM) calculada mediante la fórmula de Boer. Alternativa: Harris-Benedict revisada (Roza & Shizgal, 1984).
-   - **Factores**: Multiplicadores de nivel de actividad física validados de 1.2 (sedentario) a 1.9 (atleta extremo).
-2. **Estimación de Porcentaje de Grasa Corporal**:
-   - **Método**: Ecuación antropométrica del Departamento de la Marina de los Estados Unidos (U.S. Navy Method - Hodgdon & Beckett, 1984).
-   - **Parámetros**: Estatura, cuello, cintura y cadera (mujeres).
-3. **Distribución de Macronutrientes**:
-   - **Método**: Directrices de la Sociedad Internacional de Nutrición Deportiva (ISSN) y conversión estándar de macronutrientes (4 kcal/g para proteínas y carbohidratos, 9 kcal/g para lípidos).
-
-> **Suite de Pruebas**: 31 pruebas unitarias automáticas implementadas en `lib/nutrition/formulas.test.ts`. Para ejecutarlas: `npm test`.
+- **Entorno Local de Ejecución**: Desarrollado y probado localmente bajo **Node.js v24.16.0** y **npm 11.13.0**.
+- **Compatibilidad de Motores (`engines`)**:
+  - `next`: Requiere `node: >=20.9.0`.
+  - `sanity`, `next-sanity`, `@sanity/image-url`: Requieren explícitamente `node: >=20.19 <22 || >=22.12`.
+- **Recomendación para Despliegues (Netlify u otros)**:
+  - Se recomienda fijar **Node.js 22 LTS** (`NODE_VERSION=22`), dado que resuelve a versiones `>=22.12` que satisfacen sin conflicto las restricciones cruzadas de Next.js y Sanity.
+  - Si se utiliza Node.js 20, debe asegurarse una subversión `>=20.19.0`.
 
 ---
 
-## 🚀 Instalación y Desarrollo Local
+## 📦 Instalación y Comandos
 
-### Prerrequisitos
-- **Node.js**: Versión `20.x` o superior (LTS recomendada).
-- **npm**: Versión `10.x` o superior.
-
-### Pasos de Instalación
-
-1. **Clonar el repositorio**:
-   ```bash
-   git clone <URL_DEL_REPOSITORIO>
-   cd sumaq-gym
-   ```
-
-2. **Instalar dependencias**:
+1. **Instalar dependencias**:
    ```bash
    npm install
    ```
 
-3. **Configurar variables de entorno**:
-   Copia la plantilla `.env.example` como `.env.local`:
-   ```bash
-   cp .env.example .env.local
-   ```
-   *Edita `.env.local` con tu Project ID de Sanity si deseas conectar un proyecto real de Sanity.*
-
-4. **Ejecutar el servidor de desarrollo**:
+2. **Iniciar servidor de desarrollo**:
    ```bash
    npm run dev
    ```
-   Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+   Disponible en el navegador en [http://localhost:3000](http://localhost:3000).
 
-5. **Ejecutar pruebas unitarias**:
+3. **Ejecutar pruebas unitarias de software**:
    ```bash
    npm test
    ```
+   Ejecuta 31 pruebas automatizadas de software sobre las funciones de cálculo matemático de nutrición y composición corporal (`lib/nutrition/formulas.test.ts`).
 
-6. **Construir para producción localmente**:
+4. **Ejecutar análisis estático (linter)**:
+   ```bash
+   npm run lint
+   ```
+
+5. **Compilar para producción**:
    ```bash
    npm run build
    ```
 
 ---
 
-## 🔐 Configuración de Variables de Entorno
+## 🗺️ Resumen de Rutas
 
-| Variable | Ámbito | Descripción | Valor por Defecto / Ejemplo |
-| :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Cliente / Servidor | ID del proyecto en Sanity (`https://manage.sanity.io`). | `tu_project_id_de_sanity` |
-| `NEXT_PUBLIC_SANITY_DATASET` | Cliente / Servidor | Nombre del dataset de Sanity. | `production` |
-| `NEXT_PUBLIC_SANITY_API_VERSION` | Cliente / Servidor | Versión de API de Sanity. | `2026-03-01` |
-| `SANITY_API_READ_TOKEN` | Servidor (Privado) | Token de lectura (solo si el dataset de Sanity es privado). | `""` (opcional) |
-| `NEXT_PUBLIC_SITE_URL` | Cliente / Servidor | URL base para resolver sitemap y canónicas. | `https://tu-sitio.netlify.app` |
-| `NEXT_PUBLIC_IS_DEMO` | Cliente / Servidor | `true`: activa cintillo demo y `noindex`. `false`: activa producción y SEO. | `true` |
-
----
-
-## ☁️ Guía de Despliegue en Netlify
-
-El proyecto está optimizado para funcionar con el adaptador de Next.js en Netlify sin exportación estática forzada (soporta Server Components y Sanity Studio dinámico):
-
-1. **Conectar Repositorio**:
-   - En Netlify Dashboard, selecciona **Add new site** > **Import an existing project** y vincula el repositorio de GitHub.
-2. **Configuración de Build**:
-   - **Base directory**: (dejar vacío)
-   - **Build command**: `npm run build`
-   - **Publish directory**: `.next`
-   - **Node.js Version**: `20` (definida automáticamente o en Environment Variables vía `NODE_VERSION=20`).
-3. **Variables de Entorno en Netlify**:
-   - Ve a **Site configuration** > **Environment variables** y añade las variables listadas en la tabla anterior.
-4. **Configuración de CORS para Sanity Studio**:
-   - Una vez asignado el subdominio de Netlify (ej. `https://sumaq-center-gym.netlify.app`), ingresa a [Sanity Management](https://manage.sanity.io).
-   - Ve a **API** > **CORS Origins** > **Add CORS origin**.
-   - Ingresa la URL de Netlify y marca la casilla **Allow credentials** para permitir el inicio de sesión en `/studio`.
+| Ruta | Descripción |
+| :--- | :--- |
+| `/` | **Inicio**: Propuesta de valor, presentación del centro y accesos directos; no duplica el catálogo completo de membresías. |
+| `/planes` | **Planes y Membresías**: Modalidades de entrenamiento, campañas de promociones, disciplinas y beneficios (con datos de muestra identificados). |
+| `/ubicacion` | **Ubicación y Contacto**: Dirección referencial en Jr. Callao 126, mapa OpenStreetMap con vista general del Centro de Lima y geolocalización en navegador. |
+| `/calculadoras` | **Calculadoras Orientativas**: Herramientas de estimación personal para Gasto Energético (TDEE), Grasa Corporal (U.S. Navy) y Distribución de Macronutrientes. |
+| `/studio` | **Sanity Studio**: Panel administrativo embebido. En el prototipo actual cuenta con esquemas y consultas en código, operando sobre datos de fallback local; el contenido remoto en Sanity Cloud no ha sido verificado. |
 
 ---
 
-## 🏁 Transición de Modo Prototipo a Producción Oficial
+## ⚙️ Configuración del Entorno (.env.example)
 
-Cuando los datos comerciales sean aprobados por la administración del gimnasio:
+El proyecto incluye la plantilla `.env.example` con los parámetros necesarios sin incluir credenciales reales:
 
-1. **Confirmar Teléfono y Coordenadas**:
-   - En `lib/data/site-data.ts`:
-     - Colocar las coordenadas exactas de la entrada: `coordinates: { lat: ..., lng: ... }`.
-     - Cambiar `coordinatesVerified: true`.
-     - Cambiar `phoneVerified: true` con el número oficial.
-2. **Desactivar Modo Demo en Netlify**:
-   - Cambiar la variable de entorno `NEXT_PUBLIC_IS_DEMO="false"`.
-   - Asignar la URL final en `NEXT_PUBLIC_SITE_URL="https://sumaqcentergym.com"`.
-3. **Despliegue y Verificación**:
-   - Lanzar el build final (`Trigger deploy`).
-   - El cintillo superior desaparecerá automáticamente.
-   - `robots.txt` y las etiquetas meta autorizarán el rastreo de Google e indexarán el sitemap.
+```bash
+cp .env.example .env.local
+```
+
+Parámetros configurables:
+- `NEXT_PUBLIC_IS_DEMO`: Controla el modo prototipo (`"true"`) o producción (`"false"`).
+- `NEXT_PUBLIC_SITE_URL`: URL base para sitemaps y metadatos canónicos.
+- `NEXT_PUBLIC_SANITY_PROJECT_ID`: ID del proyecto en Sanity.
+- `NEXT_PUBLIC_SANITY_DATASET`: Nombre del dataset (por defecto `"production"`).
+- `NEXT_PUBLIC_SANITY_API_VERSION`: Versión de API de Sanity (`"2026-03-01"`).
+- `SANITY_API_READ_TOKEN`: Token opcional para datasets privados (dejar vacío si el dataset es de lectura pública).
 
 ---
 
-## 📄 Licencia y Derechos
+## 📚 Documentación Técnica y Procedimientos
 
-© Sumaq Center Gym. Desarrollado para uso institucional y comercial.
+Para consultar detalles específicos de arquitectura, despliegue y estado de pendientes, revisa los documentos en la carpeta `docs/`:
+
+- 📄 [Informe Técnico](docs/informe-tecnico.md): Arquitectura, estado de Sanity, calculadoras orientativas y alcance de las pruebas.
+- 🚀 [Guía de Despliegue en Netlify](docs/despliegue-netlify.md): Configuración del runtime de Node, variables y verificación.
+- 📋 [Lista de Pendientes y Hoja de Ruta](docs/pendientes.md): Datos comerciales que debe confirmar el gimnasio e ideas fuera de alcance.
