@@ -1,6 +1,7 @@
 import React from "react";
+import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, MapPin } from "lucide-react";
 import { BadgeUnconfirmed } from "@/components/ui/BadgeUnconfirmed";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
@@ -149,20 +150,36 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
                       </div>
 
                       <div>
-                        <a
-                          href={planUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] ${
-                            plan.destacado
-                              ? "bg-[#176B48] text-white hover:bg-[#105236] shadow-sm"
-                              : "bg-[#F8F9F6] text-[#17211D] hover:bg-[#E7F1E9] border border-[#DCE3DD] hover:border-[#176B48]/50"
-                          }`}
-                        >
-                          <WhatsAppIcon className="w-4 h-4" />
-                          <span>Consultar Plan</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </a>
+                        {planUrl ? (
+                          <a
+                            href={planUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] ${
+                              plan.destacado
+                                ? "bg-[#176B48] text-white hover:bg-[#105236] shadow-sm"
+                                : "bg-[#F8F9F6] text-[#17211D] hover:bg-[#E7F1E9] border border-[#DCE3DD] hover:border-[#176B48]/50"
+                            }`}
+                          >
+                            <WhatsAppIcon className="w-4 h-4" />
+                            <span>Consultar Plan</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </a>
+                        ) : (
+                          <Link
+                            href="/ubicacion"
+                            className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] ${
+                              plan.destacado
+                                ? "bg-[#176B48] text-white hover:bg-[#105236] shadow-sm"
+                                : "bg-[#F8F9F6] text-[#17211D] hover:bg-[#E7F1E9] border border-[#DCE3DD] hover:border-[#176B48]/50"
+                            }`}
+                            title="Línea telefónica en validación. Consulta en nuestra sede."
+                          >
+                            <MapPin className="w-4 h-4" />
+                            <span>Consultar en Sede</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </StaggerItem>
@@ -222,20 +239,36 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
                       </div>
 
                       <div>
-                        <a
-                          href={planUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] ${
-                            plan.highlighted
-                              ? "bg-[#176B48] text-white hover:bg-[#105236] shadow-sm"
-                              : "bg-[#F8F9F6] text-[#17211D] hover:bg-[#E7F1E9] border border-[#DCE3DD] hover:border-[#176B48]/50"
-                          }`}
-                        >
-                          <WhatsAppIcon className="w-4 h-4" />
-                          <span>Consultar Plan</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </a>
+                        {planUrl ? (
+                          <a
+                            href={planUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] ${
+                              plan.highlighted
+                                ? "bg-[#176B48] text-white hover:bg-[#105236] shadow-sm"
+                                : "bg-[#F8F9F6] text-[#17211D] hover:bg-[#E7F1E9] border border-[#DCE3DD] hover:border-[#176B48]/50"
+                            }`}
+                          >
+                            <WhatsAppIcon className="w-4 h-4" />
+                            <span>Consultar Plan</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </a>
+                        ) : (
+                          <Link
+                            href="/ubicacion"
+                            className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] ${
+                              plan.highlighted
+                                ? "bg-[#176B48] text-white hover:bg-[#105236] shadow-sm"
+                                : "bg-[#F8F9F6] text-[#17211D] hover:bg-[#E7F1E9] border border-[#DCE3DD] hover:border-[#176B48]/50"
+                            }`}
+                            title="Línea telefónica en validación. Consulta en nuestra sede."
+                          >
+                            <MapPin className="w-4 h-4" />
+                            <span>Consultar en Sede</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </StaggerItem>

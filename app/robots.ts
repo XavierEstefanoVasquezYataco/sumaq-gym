@@ -9,7 +9,10 @@ import { isDemoMode } from "@/lib/data/site-data";
  *    bloquea explícitamente el panel administrativo /studio y declara el sitemap oficial.
  */
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sumaqcentergym.com";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.URL ||
+    "http://localhost:3000";
 
   if (isDemoMode) {
     return {

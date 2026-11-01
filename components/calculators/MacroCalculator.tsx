@@ -13,7 +13,9 @@ import {
   RotateCcw,
   AlertCircle,
   CheckCircle2,
+  MapPin,
 } from "lucide-react";
+import Link from "next/link";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { getWhatsAppUrl } from "@/lib/data/site-data";
 
@@ -388,15 +390,25 @@ export function MacroCalculator({
               {result.disclaimer}
             </p>
 
-            <a
-              href={getWhatsAppUrl(whatsappMessage)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#176B48] hover:bg-[#105236] text-white text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] shadow-sm ml-auto"
-            >
-              <WhatsAppIcon className="w-4 h-4 text-white" />
-              <span>Consultar Plan con Entrenadores</span>
-            </a>
+            {getWhatsAppUrl(whatsappMessage) ? (
+              <a
+                href={getWhatsAppUrl(whatsappMessage)!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#176B48] hover:bg-[#105236] text-white text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] shadow-sm ml-auto"
+              >
+                <WhatsAppIcon className="w-4 h-4 text-white" />
+                <span>Consultar Plan con Entrenadores</span>
+              </a>
+            ) : (
+              <Link
+                href="/ubicacion"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#176B48] hover:bg-[#105236] text-white text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] shadow-sm ml-auto"
+              >
+                <MapPin className="w-4 h-4 text-white" />
+                <span>Consultar en Sede</span>
+              </Link>
+            )}
           </div>
         </div>
       )}

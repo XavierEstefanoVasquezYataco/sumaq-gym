@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, ArrowUpRight } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowUpRight, MapPin } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { SITE_DATA, getWhatsAppUrl, isDemoMode } from "@/lib/data/site-data";
@@ -241,15 +241,26 @@ export function Navbar({ settings }: NavbarProps) {
 
             {/* CTA Desktop - Rectangular Moderado rounded-lg (Sin Píldora) */}
             <div className="hidden md:flex items-center gap-3">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98] min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#176B48]"
-              >
-                <WhatsAppIcon className="w-4 h-4 text-white" />
-                <span>WhatsApp</span>
-              </a>
+              {whatsappUrl ? (
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98] min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#176B48]"
+                >
+                  <WhatsAppIcon className="w-4 h-4 text-white" />
+                  <span>WhatsApp</span>
+                </a>
+              ) : (
+                <Link
+                  href="/ubicacion"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98] min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#176B48]"
+                  title="Línea de WhatsApp pendiente de confirmación formal. Consulta nuestra sede en Jr. Callao 126."
+                >
+                  <MapPin className="w-4 h-4 text-white" />
+                  <span>Contacto en Sede</span>
+                </Link>
+              )}
             </div>
 
             {/* Botón Disparador Menú Móvil */}
@@ -349,18 +360,29 @@ export function Navbar({ settings }: NavbarProps) {
                 <ArrowUpRight className="w-4 h-4 text-[#526159]" />
               </Link>
 
-              {/* WhatsApp Botón Móvil */}
+              {/* Botón Móvil */}
               <div className="pt-4 mt-2 border-t border-[#DCE3DD]">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] active:scale-[0.98] transition-all shadow-md min-h-[44px]"
-                >
-                  <WhatsAppIcon className="w-5 h-5 text-white" />
-                  <span>Contactar por WhatsApp</span>
-                </a>
+                {whatsappUrl ? (
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] active:scale-[0.98] transition-all shadow-md min-h-[44px]"
+                  >
+                    <WhatsAppIcon className="w-5 h-5 text-white" />
+                    <span>Contactar por WhatsApp</span>
+                  </a>
+                ) : (
+                  <Link
+                    href="/ubicacion"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] active:scale-[0.98] transition-all shadow-md min-h-[44px]"
+                  >
+                    <MapPin className="w-5 h-5 text-white" />
+                    <span>Contacto en Sede (Jr. Callao 126)</span>
+                  </Link>
+                )}
                 <p className="text-center text-[11px] text-[#526159] mt-2 font-medium">
                   {SITE_DATA.street} • {SITE_DATA.district}
                 </p>

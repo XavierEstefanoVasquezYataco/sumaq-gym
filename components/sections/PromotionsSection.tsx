@@ -1,7 +1,8 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Sparkles, Calendar, ArrowRight, Tag } from "lucide-react";
+import { Sparkles, Calendar, ArrowRight, Tag, MapPin } from "lucide-react";
 import { BadgeUnconfirmed } from "@/components/ui/BadgeUnconfirmed";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
@@ -91,16 +92,27 @@ export function PromotionsSection({ promotions = [] }: PromotionsSectionProps) {
                     </div>
 
                     <div className="pt-4 border-t border-white/10">
-                      <a
-                        href={buttonUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
-                      >
-                        <WhatsAppIcon className="w-4 h-4 text-white" />
-                        <span>{buttonText}</span>
-                        <ArrowRight className="w-4 h-4 text-white" />
-                      </a>
+                      {buttonUrl ? (
+                        <a
+                          href={buttonUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
+                        >
+                          <WhatsAppIcon className="w-4 h-4 text-white" />
+                          <span>{buttonText}</span>
+                          <ArrowRight className="w-4 h-4 text-white" />
+                        </a>
+                      ) : (
+                        <Link
+                          href="/ubicacion"
+                          className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
+                        >
+                          <MapPin className="w-4 h-4 text-white" />
+                          <span>Consultar en Sede</span>
+                          <ArrowRight className="w-4 h-4 text-white" />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </StaggerItem>
@@ -145,18 +157,29 @@ export function PromotionsSection({ promotions = [] }: PromotionsSectionProps) {
                 </div>
 
                 <div className="lg:col-span-4 flex flex-col items-center lg:items-end justify-center">
-                  <a
-                    href={DEFAULT_WHATSAPP_PROMO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
-                  >
-                    <WhatsAppIcon className="w-5 h-5 text-white" />
-                    <span>Consultar Promo</span>
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </a>
+                  {DEFAULT_WHATSAPP_PROMO_URL ? (
+                    <a
+                      href={DEFAULT_WHATSAPP_PROMO_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
+                    >
+                      <WhatsAppIcon className="w-5 h-5 text-white" />
+                      <span>Consultar Promo</span>
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </a>
+                  ) : (
+                    <Link
+                      href="/ubicacion"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
+                    >
+                      <MapPin className="w-5 h-5 text-white" />
+                      <span>Consultar en Sede</span>
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </Link>
+                  )}
                   <span className="text-[11px] text-[#A3B8AD] mt-2 text-center lg:text-right">
-                    Respuesta rápida por WhatsApp
+                    Atención en recepción • Jirón Callao 126
                   </span>
                 </div>
               </div>
@@ -177,16 +200,27 @@ export function PromotionsSection({ promotions = [] }: PromotionsSectionProps) {
                 Actualmente no contamos con promociones vigentes publicadas. Si deseas conocer disponibilidad de cupos, facilidades de pago o tarifas corporativas para nuevas inscripciones, escríbenos directamente por WhatsApp.
               </p>
               <div className="pt-3">
-                <a
-                  href={DEFAULT_WHATSAPP_PROMO_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
-                >
-                  <WhatsAppIcon className="w-4 h-4 text-white" />
-                  <span>Consultar Membresías por WhatsApp</span>
-                  <ArrowRight className="w-4 h-4 text-white" />
-                </a>
+                {DEFAULT_WHATSAPP_PROMO_URL ? (
+                  <a
+                    href={DEFAULT_WHATSAPP_PROMO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
+                  >
+                    <WhatsAppIcon className="w-4 h-4 text-white" />
+                    <span>Consultar Membresías por WhatsApp</span>
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </a>
+                ) : (
+                  <Link
+                    href="/ubicacion"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
+                  >
+                    <MapPin className="w-4 h-4 text-white" />
+                    <span>Consultar en Sede</span>
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </Link>
+                )}
               </div>
             </div>
           </FadeIn>

@@ -18,6 +18,7 @@ import {
   Navigation,
   ExternalLink,
   Bus,
+  Phone,
 } from "lucide-react";
 import { getSettings } from "@/lib/sanity/client";
 
@@ -177,15 +178,31 @@ export default function UbicacionPage() {
                     <BadgeUnconfirmed size="sm" />
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#176B48] hover:bg-[#105236] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#176B48]"
-                    >
-                      <WhatsAppIcon className="w-4 h-4 text-white" />
-                      <span>WhatsApp: {SITE_DATA.phoneDisplay}</span>
-                    </a>
+                    {whatsappUrl ? (
+                      <a
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#176B48] hover:bg-[#105236] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#176B48]"
+                      >
+                        <WhatsAppIcon className="w-4 h-4 text-white" />
+                        <span>WhatsApp: {SITE_DATA.phoneDisplay}</span>
+                      </a>
+                    ) : (
+                      <div className="w-full flex items-center gap-3 p-3.5 rounded-lg bg-[#F8F9F6] border border-[#DCE3DD] text-xs">
+                        <div className="w-8 h-8 rounded-md bg-[#E7F1E9] text-[#176B48] flex items-center justify-center shrink-0">
+                          <Phone className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className="font-bold text-[#17211D] block">
+                            Línea de WhatsApp: {SITE_DATA.phoneDisplay}
+                          </span>
+                          <span className="text-[#526159] text-[11px]">
+                            Contacto presencial directo en recepción (Jirón Callao 126).
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 

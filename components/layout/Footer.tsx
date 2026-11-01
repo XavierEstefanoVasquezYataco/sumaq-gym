@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MapPin, Phone, Clock, ArrowUpRight, ShieldCheck } from "lucide-react";
 import { WhatsAppIcon, InstagramIcon, FacebookIcon } from "@/components/ui/Icons";
 import { BadgeUnconfirmed } from "@/components/ui/BadgeUnconfirmed";
+import { getWhatsAppUrl } from "@/lib/data/site-data";
 import type { AjustesGenerales } from "@/lib/sanity/types";
 
 const CURRENT_YEAR = 2026;
@@ -15,8 +16,6 @@ export function Footer({ settings }: FooterProps) {
   const address =
     settings?.direccion || "Jirón Callao 126, Cercado de Lima 15001";
   const displayPhone = settings?.telefonoWhatsapp || "933 596 324";
-  const rawPhone =
-    settings?.telefonoWhatsapp?.replace(/\D/g, "") || "51933596324";
   const instagramUrl =
     settings?.instagramUrl || "https://www.instagram.com/sumaqcentergym/";
   const facebookUrl =
@@ -26,9 +25,9 @@ export function Footer({ settings }: FooterProps) {
   const hoursSat = settings?.horarioSabado || "POR CONFIRMAR";
   const hoursSun = settings?.horarioDomingo || "POR CONFIRMAR";
 
-  const whatsappFooterUrl = `https://wa.me/${rawPhone}?text=${encodeURIComponent(
-    "Hola Sumaq Center Gym, deseo más información."
-  )}`;
+  const whatsappFooterUrl = getWhatsAppUrl(
+    "Hola Sumaq Center Gym, deseo más información sobre membresías y horarios."
+  );
 
   return (
     <footer className="bg-[#17211D] border-t border-[#263730] text-[#9DB0A6]">
@@ -76,15 +75,17 @@ export function Footer({ settings }: FooterProps) {
               >
                 <FacebookIcon className="w-5 h-5" />
               </a>
-              <a
-                href={whatsappFooterUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-lg bg-white/5 hover:bg-[#176B48] hover:text-white flex items-center justify-center transition-all text-[#A3B8AD] border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B48]"
-                aria-label="WhatsApp de Sumaq Center Gym"
-              >
-                <WhatsAppIcon className="w-5 h-5" />
-              </a>
+              {whatsappFooterUrl && (
+                <a
+                  href={whatsappFooterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-lg bg-white/5 hover:bg-[#176B48] hover:text-white flex items-center justify-center transition-all text-[#A3B8AD] border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B48]"
+                  aria-label="WhatsApp de Sumaq Center Gym"
+                >
+                  <WhatsAppIcon className="w-5 h-5" />
+                </a>
+              )}
             </div>
           </div>
 
@@ -96,60 +97,52 @@ export function Footer({ settings }: FooterProps) {
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a
-                  href="#beneficios"
+                <Link
+                  href="/"
                   className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
                 >
-                  Beneficios del Gimnasio
-                </a>
+                  Inicio
+                </Link>
               </li>
               <li>
-                <a
-                  href="#clases"
-                  className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
-                >
-                  Clases y Disciplinas
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#promociones"
-                  className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
-                >
-                  Promociones y Ofertas
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#planes"
+                <Link
+                  href="/planes"
                   className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
                 >
                   Planes de Membresía
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#calculadora"
+                <Link
+                  href="/planes#clases"
                   className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
                 >
-                  Calculadora de Entrenamiento
-                </a>
+                  Clases & Disciplinas
+                </Link>
               </li>
               <li>
-                <a
-                  href="#horarios"
+                <Link
+                  href="/planes#promociones"
                   className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
                 >
-                  Horarios de Atención
-                </a>
+                  Promociones Activas
+                </Link>
               </li>
               <li>
-                <a
-                  href="#ubicacion"
+                <Link
+                  href="/calculadoras"
                   className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
                 >
-                  Ubicación en Cercado
-                </a>
+                  Calculadoras de Entrenamiento
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/ubicacion"
+                  className="hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all"
+                >
+                  Ubicación y Accesos
+                </Link>
               </li>
             </ul>
           </div>
@@ -220,16 +213,23 @@ export function Footer({ settings }: FooterProps) {
                 Referencia: A pocos metros de la Plaza de Armas
               </p>
               <div className="pt-2 border-t border-white/10">
-                <a
-                  href={whatsappFooterUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-white hover:text-[#A3B8AD] transition-colors"
-                >
-                  <Phone className="w-4 h-4 text-[#A3B8AD]" />
-                  <span className="font-mono">{displayPhone}</span>
-                  <BadgeUnconfirmed size="sm" />
-                </a>
+                {whatsappFooterUrl ? (
+                  <a
+                    href={whatsappFooterUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-white hover:text-[#A3B8AD] transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-[#A3B8AD]" />
+                    <span className="font-mono">{displayPhone}</span>
+                  </a>
+                ) : (
+                  <div className="flex items-center gap-2 text-white">
+                    <Phone className="w-4 h-4 text-[#A3B8AD]" />
+                    <span className="font-mono text-xs">{displayPhone}</span>
+                    <BadgeUnconfirmed size="sm" label="POR CONFIRMAR" />
+                  </div>
+                )}
               </div>
             </div>
           </div>

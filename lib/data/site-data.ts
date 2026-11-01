@@ -172,9 +172,14 @@ export const NAVIGATION_LINKS = {
 };
 
 /**
- * Generador de enlace de WhatsApp con mensaje personalizado
+ * Generador de enlace de WhatsApp con mensaje personalizado.
+ * Retorna null si la línea telefónica no ha sido formalmente verificada,
+ * evitando abrir chats hacia números no confirmados.
  */
-export function getWhatsAppUrl(customMessage?: string): string {
+export function getWhatsAppUrl(customMessage?: string): string | null {
+  if (!SITE_DATA.phoneVerified) {
+    return null;
+  }
   const message = customMessage || SITE_DATA.defaultWhatsAppMessage;
   return `https://wa.me/${SITE_DATA.phoneRaw}?text=${encodeURIComponent(message)}`;
 }

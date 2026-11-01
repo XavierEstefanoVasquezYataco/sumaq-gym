@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
 import { FadeIn } from "@/components/ui/MotionWrapper";
 import { WhatsAppIcon } from "@/components/ui/Icons";
+import { getWhatsAppUrl } from "@/lib/data/site-data";
 
 interface GoalOption {
   id: string;
@@ -48,9 +50,7 @@ export function FitnessCalculator() {
 
   const whatsappMessage = `Hola Sumaq Center Gym, usé la calculadora web y mi objetivo es ${currentGoal.label} (${frequency} días/sem, horario ${timePreference}). Deseo consultar sobre el ${currentGoal.suggestedPlan}.`;
 
-  const whatsappUrl = `https://wa.me/51933596324?text=${encodeURIComponent(
-    whatsappMessage
-  )}`;
+  const whatsappUrl = getWhatsAppUrl(whatsappMessage);
 
   return (
     <section id="calculadora" className="py-20 lg:py-28 bg-[#F8F9F6] relative border-b border-[#DCE3DD]/60">
@@ -164,16 +164,26 @@ export function FitnessCalculator() {
                 </div>
 
                 <div>
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px] shadow-sm"
-                  >
-                    <WhatsAppIcon className="w-4 h-4 text-white" />
-                    <span>Consultar Recomendación</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                  {whatsappUrl ? (
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px] shadow-sm"
+                    >
+                      <WhatsAppIcon className="w-4 h-4 text-white" />
+                      <span>Consultar Recomendación</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  ) : (
+                    <Link
+                      href="/ubicacion"
+                      className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px] shadow-sm"
+                    >
+                      <span>Consultar en Sede</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

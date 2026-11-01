@@ -6,7 +6,10 @@ import type { MetadataRoute } from "next";
  * Excluye de forma rigurosa la ruta administrativa /studio.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sumaqcentergym.com";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.URL ||
+    "http://localhost:3000";
   const currentDate = new Date("2026-11-01T00:00:00.000Z");
 
   return [

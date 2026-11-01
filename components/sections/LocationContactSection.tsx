@@ -97,14 +97,20 @@ export function LocationContactSection({
                         </span>
                         <BadgeUnconfirmed size="sm" />
                       </div>
-                      <a
-                        href={whatsappLocationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-base font-bold text-[#176B48] hover:underline mt-0.5 block"
-                      >
-                        {displayPhone}
-                      </a>
+                      {whatsappLocationUrl ? (
+                        <a
+                          href={whatsappLocationUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-base font-bold text-[#176B48] hover:underline mt-0.5 block"
+                        >
+                          {displayPhone}
+                        </a>
+                      ) : (
+                        <span className="text-base font-bold text-[#176B48] mt-0.5 block">
+                          {displayPhone}
+                        </span>
+                      )}
                     </div>
                   </div>
 

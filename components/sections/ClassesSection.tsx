@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Dumbbell, Activity, Flame, Users, ArrowUpRight } from "lucide-react";
 import { BadgeUnconfirmed } from "@/components/ui/BadgeUnconfirmed";
@@ -177,15 +178,25 @@ export function ClassesSection({ classes = [] }: ClassesSectionProps) {
                 Escríbenos directamente y te brindamos los horarios detallados en tiempo real.
               </p>
             </div>
-            <a
-              href={WHATSAPP_CLASSES_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all shrink-0 min-h-[44px]"
-            >
-              <span>Consultar Clases</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
+            {WHATSAPP_CLASSES_URL ? (
+              <a
+                href={WHATSAPP_CLASSES_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all shrink-0 min-h-[44px]"
+              >
+                <span>Consultar Clases</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+            ) : (
+              <Link
+                href="/ubicacion"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all shrink-0 min-h-[44px]"
+              >
+                <span>Consultar en Sede</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            )}
           </div>
         </FadeIn>
       </div>
