@@ -7,15 +7,16 @@ import { WhatsAppIcon } from "@/components/ui/Icons";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
 import { urlFor } from "@/sanity/lib/image";
 import { formatDateInLima } from "@/lib/sanity/queries";
-import { isDemoMode } from "@/lib/data/site-data";
+import { isDemoMode, getWhatsAppUrl } from "@/lib/data/site-data";
 import type { Promocion } from "@/lib/sanity/types";
 
 interface PromotionsSectionProps {
   promotions?: Promocion[];
 }
 
-const DEFAULT_WHATSAPP_PROMO_URL =
-  "https://wa.me/51933596324?text=Hola%20Sumaq%20Center%20Gym%2C%20quisiera%20conocer%20las%20promociones%20vigentes%20de%20membres%C3%ADa.";
+const DEFAULT_WHATSAPP_PROMO_URL = getWhatsAppUrl(
+  "Hola Sumaq Center Gym, quisiera conocer las promociones vigentes de membresía."
+);
 
 export function PromotionsSection({ promotions = [] }: PromotionsSectionProps) {
   const hasPromotions = promotions && promotions.length > 0;
@@ -43,9 +44,9 @@ export function PromotionsSection({ promotions = [] }: PromotionsSectionProps) {
                 promo.textoBoton || "Reclamar Promoción por WhatsApp";
               const buttonUrl =
                 promo.enlaceBoton ||
-                `https://wa.me/51933596324?text=${encodeURIComponent(
+                getWhatsAppUrl(
                   `Hola Sumaq Center Gym, deseo reclamar la promoción: "${promo.titulo}".`
-                )}`;
+                );
 
               return (
                 <StaggerItem key={promo._id} className="h-full">
@@ -133,8 +134,8 @@ export function PromotionsSection({ promotions = [] }: PromotionsSectionProps) {
 
                   <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-[#A3B8AD]">
                     <div className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-[#A3B8AD]" />
-                      <span>Horario continuo L-V de 6:00 a. m. a 11:00 p. m.</span>
+                      <Tag className="w-4 h-4 text-[#A3B8AD]" />
+                      <span>Sede Jirón Callao 126 • Cercado de Lima</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Tag className="w-4 h-4 text-[#A3B8AD]" />

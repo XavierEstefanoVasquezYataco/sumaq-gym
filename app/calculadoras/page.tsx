@@ -47,9 +47,9 @@ export default function CalculadorasPage() {
           {/* Encabezado Principal */}
           <div className="py-6 sm:py-10">
             <SectionHeading
-              badge="Herramientas Nativas de Rendimiento"
-              title="Calculadoras Científicas de Salud y Entrenamiento"
-              description="Estima tu composición corporal, gasto energético diario y requerimientos de macronutrientes mediante fórmulas validadas por la literatura científica."
+              badge="Herramientas de Apoyo"
+              title="Calculadoras de Grasa, Calorías y Macronutrientes"
+              description="Herramientas de estimación orientativa para conocer tu porcentaje aproximado de grasa corporal, gasto energético diario (TDEE) y reparto de macronutrientes con cálculos locales."
             />
           </div>
 

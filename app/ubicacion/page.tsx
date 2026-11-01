@@ -82,18 +82,23 @@ export default function UbicacionPage() {
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#176B48] block">
-                      Dirección Oficial
-                    </span>
-                    <h2 className="text-xl font-bold text-[#17211D] mt-0.5">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#176B48]">
+                        Dirección de Referencia
+                      </span>
+                      <BadgeUnconfirmed size="sm" label="UBICACIÓN EXACTA POR CONFIRMAR" />
+                    </div>
+                    <h2 className="text-xl font-bold text-[#17211D]">
                       {SITE_DATA.street}
                     </h2>
                     <p className="text-xs text-[#526159] mt-0.5">
                       {SITE_DATA.district}, {SITE_DATA.city} {SITE_DATA.postalCode}, {SITE_DATA.country}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="text-xs text-[#526159]">Piso / Referencia:</span>
-                      <BadgeUnconfirmed size="sm" label="7.° PISO (POR CONFIRMAR)" />
+                      <span className="text-xs text-[#526159]">Piso / Entrada:</span>
+                      <span className="text-xs font-medium text-[#17211D]">
+                        {SITE_DATA.floorReference}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -116,33 +121,50 @@ export default function UbicacionPage() {
                   </div>
                 </div>
 
-                {/* 3. Canales Directos de Ruteo a Waze y Google Maps */}
+                {/* 3. Canales de Navegación Externa */}
                 <div className="pt-4 border-t border-[#DCE3DD] space-y-3">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#17211D] block">
-                    Cómo Llegar (Navegación GPS)
+                    Búsqueda y Navegación
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-2.5">
                     <a
-                      href={NAVIGATION_LINKS.wazeDirections}
+                      href={NAVIGATION_LINKS.googleMapsSearch}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#F8F9F6] hover:bg-[#E7F1E9] text-[#17211D] border border-[#DCE3DD] hover:border-[#176B48]/50 transition-all min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B48]"
+                      className="w-full inline-flex items-center justify-between py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#F8F9F6] hover:bg-[#E7F1E9] text-[#17211D] border border-[#DCE3DD] hover:border-[#176B48]/50 transition-all min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B48]"
                     >
-                      <Navigation className="w-4 h-4 text-[#1E3A8A]" />
-                      <span>Ruta en Waze</span>
-                      <ExternalLink className="w-3 h-3 text-[#526159]" />
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-[#176B48]" />
+                        <span>Buscar dirección en Google Maps</span>
+                      </div>
+                      <ExternalLink className="w-3.5 h-3.5 text-[#526159]" />
                     </a>
+                    <p className="text-[11px] text-[#526159] px-1">
+                      Búsqueda por dirección postal; no corresponde a un destino verificado por pin.
+                    </p>
 
-                    <a
-                      href={NAVIGATION_LINKS.googleMapsDirections}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#F8F9F6] hover:bg-[#E7F1E9] text-[#17211D] border border-[#DCE3DD] hover:border-[#176B48]/50 transition-all min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B48]"
-                    >
-                      <MapPin className="w-4 h-4 text-[#176B48]" />
-                      <span>Google Maps</span>
-                      <ExternalLink className="w-3 h-3 text-[#526159]" />
-                    </a>
+                    {SITE_DATA.coordsVerified && NAVIGATION_LINKS.wazeDirections ? (
+                      <a
+                        href={NAVIGATION_LINKS.wazeDirections}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full inline-flex items-center justify-between py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#F8F9F6] hover:bg-[#E7F1E9] text-[#17211D] border border-[#DCE3DD] hover:border-[#176B48]/50 transition-all min-h-[44px]"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Navigation className="w-4 h-4 text-[#1E3A8A]" />
+                          <span>Ruta en Waze</span>
+                        </div>
+                        <ExternalLink className="w-3.5 h-3.5 text-[#526159]" />
+                      </a>
+                    ) : (
+                      <div className="w-full flex items-center justify-between py-2.5 px-4 rounded-lg text-xs bg-[#F8F9F6] border border-dashed border-[#DCE3DD] text-[#526159]">
+                        <span className="flex items-center gap-2 font-medium">
+                          <Navigation className="w-4 h-4 text-[#526159]/60" />
+                          <span>Navegación Waze: pendiente de pin confirmado</span>
+                        </span>
+                        <BadgeUnconfirmed size="sm" label="INACTIVO" />
+                      </div>
+                    )}
                   </div>
                 </div>
 

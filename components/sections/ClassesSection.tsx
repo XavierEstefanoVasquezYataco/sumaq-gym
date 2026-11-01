@@ -3,6 +3,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Dumbbell, Activity, Flame, Users, ArrowUpRight } from "lucide-react";
 import { BadgeUnconfirmed } from "@/components/ui/BadgeUnconfirmed";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
+import { getWhatsAppUrl } from "@/lib/data/site-data";
 import type { Clase } from "@/lib/sanity/types";
 
 interface ClassesSectionProps {
@@ -21,7 +22,7 @@ const DEFAULT_CLASSES = [
     icon: Dumbbell,
     name: "Musculación & Pesas Libres",
     description:
-      "Desarrollo de fuerza, hipertrofia y tonificación con mancuernas, barras olímpicas y máquinas de trayectoria guiada.",
+      "Desarrollo de fuerza, hipertrofia y acondicionamiento con mancuernas, barras olímpicas y máquinas de trayectoria guiada.",
     level: "Todos los niveles",
     status: "Disponible en sala",
     isUnconfirmed: false,
@@ -30,7 +31,7 @@ const DEFAULT_CLASSES = [
     icon: Flame,
     name: "Cardio & Resistencia",
     description:
-      "Equipos cardiovasculares para mejorar tu capacidad aeróbica, quema calórica y salud cardiovascular.",
+      "Equipos cardiovasculares para mejorar tu capacidad aeróbica y salud cardiovascular.",
     level: "Todos los niveles",
     status: "Disponible en sala",
     isUnconfirmed: false,
@@ -39,7 +40,7 @@ const DEFAULT_CLASSES = [
     icon: Activity,
     name: "Entrenamiento Funcional",
     description:
-      "Circuitos de alta y media intensidad diseñados para mejorar movilidad, agilidad, potencia y resistencia muscular.",
+      "Circuitos de media y alta intensidad para mejorar movilidad, agilidad, potencia y resistencia física.",
     level: "Todos los niveles",
     status: "POR CONFIRMAR",
     isUnconfirmed: true,
@@ -48,15 +49,16 @@ const DEFAULT_CLASSES = [
     icon: Users,
     name: "Clases Grupales y Talleres",
     description:
-      "Sesiones grupales dirigidas. Consulta la programación semanal de horarios y disciplinas en recepción.",
+      "Sesiones grupales dirigidas. Consulta la programación semanal de disciplinas en recepción.",
     level: "POR CONFIRMAR",
     status: "POR CONFIRMAR",
     isUnconfirmed: true,
   },
 ];
 
-const WHATSAPP_CLASSES_URL =
-  "https://wa.me/51933596324?text=Hola%20Sumaq%20Center%20Gym%2C%20quisiera%20consultar%20sobre%20las%20clases%20y%20disciplinas%20disponibles.";
+const WHATSAPP_CLASSES_URL = getWhatsAppUrl(
+  "Hola Sumaq Center Gym, quisiera consultar sobre las clases y disciplinas disponibles."
+);
 
 export function ClassesSection({ classes = [] }: ClassesSectionProps) {
   const hasSanityClasses = classes && classes.length > 0;

@@ -86,7 +86,7 @@ export function BodyFatCalculator({
       {/* Selector de Sexo Biológico */}
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#17211D] mb-2">
-          1. Sexo Biológico (requerido por la ecuación oficial U.S. Navy)
+          1. Sexo Biológico (requerido por el método U.S. Navy)
         </label>
         <div className="grid grid-cols-2 gap-3 max-w-md">
           <button

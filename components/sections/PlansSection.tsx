@@ -1,9 +1,10 @@
 import React from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Check, ArrowRight, Sparkles } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { BadgeUnconfirmed } from "@/components/ui/BadgeUnconfirmed";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
+import { getWhatsAppUrl } from "@/lib/data/site-data";
 import type { Plan } from "@/lib/sanity/types";
 
 interface PlansSectionProps {
@@ -13,47 +14,42 @@ interface PlansSectionProps {
 const DEFAULT_PLANS = [
   {
     name: "Plan Mensual",
-    period: "Por mes",
-    description: "Ideal para iniciar tu rutina con total flexibilidad mes a mes.",
+    period: "1 Mes",
+    description: "Modalidad flexible mes a mes para tu rutina de fuerza y acondicionamiento.",
     features: [
-      "Acceso ilimitado a zona de musculación y pesas",
+      "Acceso a sala de musculación y pesas",
       "Uso de máquinas cardiovasculares",
-      "Horario continuo L-V: 6:00 a. m. a 11:00 p. m.",
-      "Asesoría y orientación básica en sala",
-      "Sin contrato forzoso de permanencia",
+      "Orientación básica en sala",
+      "Casilleros para uso durante el entrenamiento",
     ],
-    popular: false,
+    highlighted: false,
     whatsappMsg: "Hola Sumaq Center Gym, deseo consultar el precio del Plan Mensual.",
   },
   {
     name: "Plan Trimestral",
-    period: "Por 3 meses",
-    description: "El tiempo necesario para consolidar tu hábito y ver transformaciones.",
+    period: "3 Meses",
+    description: "Período orientado a la consolidación del hábito de entrenamiento.",
     features: [
-      "Acceso ilimitado a zona de musculación y pesas",
+      "Acceso a sala de musculación y pesas",
       "Uso de máquinas cardiovasculares",
-      "Horario continuo L-V: 6:00 a. m. a 11:00 p. m.",
-      "Asesoría y orientación en sala",
-      "Tarifa preferencial por trimestre",
-      "Congelamiento temporal por viaje o salud (POR CONFIRMAR)",
+      "Orientación básica en sala",
+      "Casilleros para uso durante el entrenamiento",
     ],
-    popular: true,
-    whatsappMsg: "Hola Sumaq Center Gym, deseo consultar el precio y beneficios del Plan Trimestral.",
+    highlighted: true,
+    whatsappMsg: "Hola Sumaq Center Gym, deseo consultar el precio y condiciones del Plan Trimestral.",
   },
   {
     name: "Plan Anual",
-    period: "Por 12 meses",
-    description: "Máximo compromiso con tu salud física con la mejor tarifa garantizada.",
+    period: "12 Meses",
+    description: "Modalidad de largo plazo para entrenamiento disciplinado y continuo.",
     features: [
-      "Acceso ilimitado 365 días a todas las áreas",
+      "Acceso a sala de musculación y pesas",
       "Uso de máquinas cardiovasculares",
-      "Horario continuo L-V: 6:00 a. m. a 11:00 p. m.",
-      "Asesoría constante en sala de musculación",
-      "El costo más económico por mes",
-      "Beneficios exclusivos y promociones acumulables",
+      "Orientación básica en sala",
+      "Casilleros para uso durante el entrenamiento",
     ],
-    popular: false,
-    whatsappMsg: "Hola Sumaq Center Gym, deseo consultar el precio y facilidades del Plan Anual.",
+    highlighted: false,
+    whatsappMsg: "Hola Sumaq Center Gym, deseo consultar el precio del Plan Anual.",
   },
 ];
 
@@ -66,8 +62,8 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
         <FadeIn direction="up">
           <SectionHeading
             badge="Membresías"
-            title="Elige el Plan que se Ajusta a tus Metas"
-            description="Sin costos ocultos. Selecciona el período de entrenamiento que mejor se adapte a tu estilo de vida."
+            title="Modalidades de Entrenamiento"
+            description="Elige el período que mejor se adapte a tus metas físicas. Tarifas oficiales sujetas a confirmación en recepción o por WhatsApp."
           />
         </FadeIn>
 
@@ -79,27 +75,27 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
             ? plans.map((plan) => {
                 const isUnconfirmed =
                   !plan.precio ||
-                  plan.precio.toUpperCase().includes("CONFIRMAR");
+                  plan.precio.toUpperCase().includes("CONFIRMAR") ||
+                  plan.precio.trim() === "";
 
-                const planUrl = `https://wa.me/51933596324?text=${encodeURIComponent(
+                const planUrl = getWhatsAppUrl(
                   plan.mensajeWhatsapp ||
                     `Hola Sumaq Center Gym, deseo consultar el precio del ${plan.nombre}.`
-                )}`;
+                );
 
                 return (
                   <StaggerItem key={plan._id} className="h-full">
                     <div
                       className={`h-full rounded-xl p-8 flex flex-col justify-between transition-all duration-300 relative bg-[#FFFFFF] ${
                         plan.destacado
-                          ? "border-2 border-[#176B48] shadow-md shadow-[#176B48]/5 lg:-translate-y-1.5"
+                          ? "border-2 border-[#176B48] shadow-md shadow-[#176B48]/5 lg:-translate-y-1"
                           : "border border-[#DCE3DD] shadow-sm hover:border-[#176B48]/40"
                       }`}
                     >
                       {plan.destacado && (
                         <div className="absolute -top-3 left-6">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#176B48] text-white">
-                            <Sparkles className="w-3 h-3" />
-                            Más Recomendado
+                          <span className="inline-flex items-center px-3 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#176B48] text-white">
+                            Opción Destacada
                           </span>
                         </div>
                       )}
@@ -116,24 +112,21 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
                           )}
                         </div>
 
-                        {/* Precio */}
+                        {/* Precio: Muestra 'Consultar precio' sin S/. suelto si no está confirmado */}
                         <div className="py-4 my-4 border-y border-[#DCE3DD] flex flex-col gap-1.5">
                           {isUnconfirmed ? (
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-2xl sm:text-3xl font-black text-[#17211D]">
-                                S/.
+                            <div className="flex items-center gap-2">
+                              <span className="text-xl sm:text-2xl font-bold text-[#17211D]">
+                                Consultar precio
                               </span>
-                              <BadgeUnconfirmed
-                                size="md"
-                                label="PRECIO POR CONFIRMAR"
-                              />
+                              <BadgeUnconfirmed size="sm" label="POR CONFIRMAR" />
                             </div>
                           ) : (
                             <div className="flex items-baseline gap-1.5">
                               <span className="text-3xl sm:text-4xl font-black text-[#17211D]">
-                                {plan.precio.startsWith("S/.")
+                                {plan.precio.startsWith("S/")
                                   ? plan.precio
-                                  : `S/. ${plan.precio}`}
+                                  : `S/ ${plan.precio}`}
                               </span>
                             </div>
                           )}
@@ -142,7 +135,7 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
                           </span>
                         </div>
 
-                        {/* Beneficios */}
+                        {/* Beneficios verificables de sala */}
                         {plan.beneficios && plan.beneficios.length > 0 && (
                           <ul className="space-y-3 mb-8 text-xs sm:text-sm text-[#526159]">
                             {plan.beneficios.map((feat, fIdx) => (
@@ -176,24 +169,21 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
                 );
               })
             : DEFAULT_PLANS.map((plan, index) => {
-                const planUrl = `https://wa.me/51933596324?text=${encodeURIComponent(
-                  plan.whatsappMsg
-                )}`;
+                const planUrl = getWhatsAppUrl(plan.whatsappMsg);
 
                 return (
                   <StaggerItem key={index} className="h-full">
                     <div
                       className={`h-full rounded-xl p-8 flex flex-col justify-between transition-all duration-300 relative bg-[#FFFFFF] ${
-                        plan.popular
-                          ? "border-2 border-[#176B48] shadow-md shadow-[#176B48]/5 lg:-translate-y-1.5"
+                        plan.highlighted
+                          ? "border-2 border-[#176B48] shadow-md shadow-[#176B48]/5 lg:-translate-y-1"
                           : "border border-[#DCE3DD] shadow-sm hover:border-[#176B48]/40"
                       }`}
                     >
-                      {plan.popular && (
+                      {plan.highlighted && (
                         <div className="absolute -top-3 left-6">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#176B48] text-white">
-                            <Sparkles className="w-3 h-3" />
-                            Más Recomendado
+                          <span className="inline-flex items-center px-3 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#176B48] text-white">
+                            Demostración de Diseño
                           </span>
                         </div>
                       )}
@@ -208,15 +198,13 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
                           </p>
                         </div>
 
+                        {/* Precio: Muestra 'Consultar precio' sin S/. suelto */}
                         <div className="py-4 my-4 border-y border-[#DCE3DD] flex flex-col gap-1.5">
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-2xl sm:text-3xl font-black text-[#17211D]">
-                              S/.
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl sm:text-2xl font-bold text-[#17211D]">
+                              Consultar precio
                             </span>
-                            <BadgeUnconfirmed
-                              size="md"
-                              label="PRECIO POR CONFIRMAR"
-                            />
+                            <BadgeUnconfirmed size="sm" label="POR CONFIRMAR" />
                           </div>
                           <span className="text-xs text-[#526159]">
                             Modalidad: {plan.period}
@@ -239,7 +227,7 @@ export function PlansSection({ plans = [] }: PlansSectionProps) {
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-bold uppercase tracking-wider transition-all min-h-[44px] ${
-                            plan.popular
+                            plan.highlighted
                               ? "bg-[#176B48] text-white hover:bg-[#105236] shadow-sm"
                               : "bg-[#F8F9F6] text-[#17211D] hover:bg-[#E7F1E9] border border-[#DCE3DD] hover:border-[#176B48]/50"
                           }`}

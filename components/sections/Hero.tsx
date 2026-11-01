@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import {
   MapPin,
-  Clock,
   Dumbbell,
   ArrowRight,
   ShieldCheck,
@@ -29,8 +28,6 @@ export function Hero({ settings }: HeroProps) {
 
   const addressText =
     settings?.direccion || "Jirón Callao 126, Cercado de Lima 15001";
-  const hoursText =
-    settings?.horarioLunesViernes || "6:00 a. m. a 11:00 p. m.";
 
   return (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 bg-[#F8F9F6] border-b border-[#DCE3DD]/70">
@@ -67,38 +64,34 @@ export function Hero({ settings }: HeroProps) {
               </p>
 
               {/* Botones de Llamada a la Acción (Rectangulares - No Píldoras) */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-6">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-6">
                 <Link
                   href="/planes"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all duration-200 shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 min-h-[44px]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all duration-200 shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 min-h-[44px]"
                 >
-                  <span>Ver Planes & Membresías</span>
+                  <span>Explorar planes</span>
                   <ArrowRight className="w-4 h-4 text-white" />
                 </Link>
 
                 <Link
                   href="/ubicacion"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm font-semibold tracking-wider text-[#176B48] bg-[#E7F1E9] hover:bg-[#d8e6db] border border-[#DCE3DD] transition-all duration-200 min-h-[44px]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider text-[#176B48] bg-[#E7F1E9] hover:bg-[#d8e6db] border border-[#DCE3DD] transition-all duration-200 min-h-[44px]"
                 >
                   <MapPin className="w-4 h-4 text-[#176B48]" />
-                  <span>Cómo Llegar</span>
+                  <span>Cómo llegar</span>
+                </Link>
+
+                <Link
+                  href="/calculadoras"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider text-[#17211D] bg-[#FFFFFF] hover:bg-[#F8F9F6] border border-[#DCE3DD] hover:border-[#176B48]/50 transition-all duration-200 min-h-[44px]"
+                >
+                  <Dumbbell className="w-4 h-4 text-[#176B48]" />
+                  <span>Usar calculadoras</span>
                 </Link>
               </div>
 
-              {/* Chips Informativos Rápidos */}
+              {/* Chips Informativos Rápidos (Sin horarios: horarios únicamente en el footer) */}
               <div className="pt-8 border-t border-[#DCE3DD] grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
-                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-[#FFFFFF] border border-[#DCE3DD] shadow-sm">
-                  <Clock className="w-5 h-5 text-[#176B48] shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-xs font-bold text-[#17211D] block">
-                      Lunes a Viernes continuo
-                    </span>
-                    <span className="text-xs text-[#526159] font-mono font-medium">
-                      {hoursText}
-                    </span>
-                  </div>
-                </div>
-
                 <div className="flex items-start gap-3 p-3.5 rounded-lg bg-[#FFFFFF] border border-[#DCE3DD] shadow-sm">
                   <MapPin className="w-5 h-5 text-[#176B48] shrink-0 mt-0.5" />
                   <div>
@@ -110,6 +103,18 @@ export function Hero({ settings }: HeroProps) {
                     </div>
                     <span className="text-xs text-[#526159]">
                       A pasos de la Plaza Mayor
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-[#FFFFFF] border border-[#DCE3DD] shadow-sm">
+                  <Dumbbell className="w-5 h-5 text-[#176B48] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-bold text-[#17211D] block">
+                      Musculación & Cardio
+                    </span>
+                    <span className="text-xs text-[#526159]">
+                      Peso libre y máquinas guiadas
                     </span>
                   </div>
                 </div>
@@ -200,11 +205,11 @@ export function Hero({ settings }: HeroProps) {
                     </div>
                   </div>
 
-                  {/* Horario resumido */}
+                  {/* Pie de tarjeta informativo */}
                   <div className="pt-4 border-t border-[#DCE3DD] flex items-center justify-between text-xs text-[#526159]">
-                    <span>Atención de sala:</span>
-                    <span className="font-mono font-bold text-[#176B48]">
-                      {hoursText}
+                    <span>Sede:</span>
+                    <span className="font-semibold text-[#176B48]">
+                      Jirón Callao 126
                     </span>
                   </div>
                 </div>

@@ -58,16 +58,15 @@ export const metadata: Metadata = {
 /**
  * Marcado estructurado Schema.org JSON-LD oficial tipo HealthClub
  * Serializado de forma segura escapando caracteres < para prevenir inyecciones XSS.
- * Solo incluye datos verificados (cero ratings ficticios, cero testimonios inventados).
+ * Solo incluye datos verificados: excluye coordenadas y teléfono no confirmados.
  */
-const jsonLdSchema = {
+const jsonLdSchema: Record<string, unknown> = {
   "@context": "https://schema.org",
   "@type": "HealthClub",
   name: "Sumaq Center Gym",
   description:
     "Centro de acondicionamiento físico, fuerza y salud en el Cercado de Lima, a pasos de la Plaza de Armas.",
   url: siteUrl,
-  telephone: SITE_DATA.phoneInternational,
   address: {
     "@type": "PostalAddress",
     streetAddress: SITE_DATA.street,
@@ -75,11 +74,6 @@ const jsonLdSchema = {
     addressRegion: "Lima",
     postalCode: SITE_DATA.postalCode,
     addressCountry: "PE",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: SITE_DATA.coordinates.lat,
-    longitude: SITE_DATA.coordinates.lng,
   },
   openingHoursSpecification: [
     {
@@ -91,6 +85,18 @@ const jsonLdSchema = {
   ],
   sameAs: [SITE_DATA.instagramUrl, SITE_DATA.facebookUrl],
 };
+
+if (SITE_DATA.phoneVerified) {
+  jsonLdSchema.telephone = SITE_DATA.phoneInternational;
+}
+
+if (SITE_DATA.coordsVerified && SITE_DATA.coordinates) {
+  jsonLdSchema.geo = {
+    "@type": "GeoCoordinates",
+    latitude: SITE_DATA.coordinates.lat,
+    longitude: SITE_DATA.coordinates.lng,
+  };
+}
 
 const safeJsonLd = JSON.stringify(jsonLdSchema).replace(/</g, "\\u003c");
 

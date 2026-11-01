@@ -1,32 +1,32 @@
 import React from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { MapPin, Clock, Dumbbell, Target } from "lucide-react";
+import { MapPin, Target, Dumbbell, ShieldCheck } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
 
 const BENEFITS = [
   {
     icon: MapPin,
-    title: "Ubicación Estratégica en Lima",
+    title: "Ubicación Céntrica en Lima",
     description:
-      "En Jirón Callao 126, a pasos de la Plaza de Armas. Ideal para entrenar antes o después de tu jornada en el Cercado de Lima.",
+      "En Jirón Callao 126, a pasos de la Plaza de Armas. Accesible desde las principales vías del centro histórico de Lima.",
   },
   {
-    icon: Clock,
-    title: "Horario Continuo Extendido",
+    icon: Target,
+    title: "Ambiente para Entrenar con Enfoque",
     description:
-      "De lunes a viernes desde las 6:00 a. m. hasta las 11:00 p. m. Entrena a tu ritmo sin interrupciones ni cierres a mediodía.",
+      "Espacio acondicionado para entrenar con constancia, disciplina y concentración en tus objetivos físicos y de salud.",
   },
   {
     icon: Dumbbell,
     title: "Zonas de Musculación & Cardio",
     description:
-      "Máquinas de fuerza, peso libre, barras, mancuernas y equipamiento cardiovascular para todos los niveles de acondicionamiento.",
+      "Máquinas de fuerza, peso libre, barras, mancuernas y equipamiento cardiovascular para diversos niveles de entrenamiento.",
   },
   {
-    icon: Target,
-    title: "Ambiente Enfocado en Resultados",
+    icon: ShieldCheck,
+    title: "Asesoría Básica en Sala",
     description:
-      "Una comunidad dedicada al progreso constante, donde cada entrenamiento cuenta para alcanzar tu mejor versión física y mental.",
+      "Orientación para el uso correcto de las máquinas y ejecución segura de los ejercicios fundamentales.",
   },
 ];
 
@@ -38,7 +38,7 @@ export function BenefitsSection() {
           <SectionHeading
             badge="¿Por qué Sumaq Center?"
             title="Tu Espacio de Entrenamiento en el Centro de Lima"
-            description="Diseñado para quienes buscan comodidad, constancia y disciplina en un punto accesible de la capital."
+            description="Instalaciones preparadas para quienes buscan constancia, comodidad y disciplina física en el centro histórico."
           />
         </FadeIn>
 

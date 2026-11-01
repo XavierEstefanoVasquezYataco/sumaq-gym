@@ -15,13 +15,18 @@ export interface GymLocation {
   postalCode: string;
   country: string;
   reference: string;
-  coordinates: {
+  floorReference: string;
+  floorVerified: boolean;
+  // Coordenadas: ausentes hasta verificación formal del propietario mediante pin confirmado
+  coordinates?: {
     lat: number;
     lng: number;
   };
+  coordsVerified: boolean;
   phoneDisplay: string;
   phoneRaw: string;
   phoneInternational: string;
+  phoneVerified: boolean;
   email: string;
   instagramUrl: string;
   facebookUrl: string;
@@ -34,6 +39,16 @@ export interface GymSchedule {
   sunday: string;
   holidays: string;
   notes: string;
+}
+
+export interface MapProviderConfig {
+  tileUrl: string;
+  tileAttribution: string;
+  maxZoom: number;
+  // Encuadre general orientativo del Centro Histórico de Lima (zona general, no representa el gimnasio)
+  generalCenter: [number, number];
+  generalZoom: number;
+  areaLabel: string;
 }
 
 export interface PlanItem {
@@ -74,7 +89,10 @@ export interface BenefitItem {
 export const isDemoMode: boolean = process.env.NEXT_PUBLIC_IS_DEMO !== 'false';
 
 /**
- * Datos institucionales y de contacto verificados de Sumaq Center Gym
+ * Datos institucionales y de contacto de Sumaq Center Gym
+ * NOTA DE PRIORIDAD: Las coordenadas anteriores fueron descartadas por el propietario.
+ * No se utilizan coordenadas estimadas ni 0,0.
+ * La ubicación exacta y el teléfono permanecen pendientes de confirmación formal.
  */
 export const SITE_DATA: GymLocation = {
   name: 'Sumaq Center Gym',
@@ -87,13 +105,16 @@ export const SITE_DATA: GymLocation = {
   postalCode: '15001',
   country: 'Perú',
   reference: 'A pasos de la Plaza de Armas, Palacio Municipal y Damero de Pizarro',
-  coordinates: {
-    lat: -12.043818,
-    lng: -77.03451,
-  },
-  phoneDisplay: '933 596 324',
+  floorReference: '7.º piso (Por confirmar)',
+  floorVerified: false,
+  // Coordenadas ausentes hasta confirmación de pin exacto
+  coordinates: undefined,
+  coordsVerified: false,
+  // Teléfono pendiente de validación formal
+  phoneDisplay: '933 596 324 (Por confirmar)',
   phoneRaw: '51933596324',
   phoneInternational: '+51 933 596 324',
+  phoneVerified: false,
   email: 'contacto@sumaqcentergym.com',
   instagramUrl: 'https://www.instagram.com/sumaqcentergym/',
   facebookUrl: 'https://www.facebook.com/SumaqSumaqGYM/',
@@ -102,8 +123,23 @@ export const SITE_DATA: GymLocation = {
 };
 
 /**
- * Horarios de atención oficiales
- * Lunes a viernes confirmado; fines de semana pendientes de confirmación formal.
+ * Configuración centralizada de mapas y teselas.
+ * Capa estándar de OpenStreetMap para evitar errores de API KEY de proveedores de pago o CARTO.
+ */
+export const MAP_CONFIG: MapProviderConfig = {
+  tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  tileAttribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+  maxZoom: 19,
+  // Coordenadas de encuadre general del Centro Histórico de Lima (Plaza Mayor / Jr. de la Unión)
+  generalCenter: [-12.0464, -77.0328],
+  generalZoom: 15,
+  areaLabel: 'Centro Histórico de Lima (Vista orientativa general • Pin del gimnasio por confirmar)',
+};
+
+/**
+ * Horarios de atención oficiales.
+ * Canónicamente centralizados: sólo deben mostrarse en el Footer.
  */
 export const SITE_SCHEDULE: GymSchedule = {
   weekdays: '6:00 a. m. a 11:00 p. m.',
@@ -114,12 +150,25 @@ export const SITE_SCHEDULE: GymSchedule = {
 };
 
 /**
- * Enlaces de navegación externa para ubicación
+ * Enlaces de navegación externa para ubicación.
+ * Búsqueda por dirección en Google Maps habilitada.
+ * Rutas punto a punto en Waze preparadas pero inactivas hasta verificar coordenadas.
  */
 export const NAVIGATION_LINKS = {
-  googleMapsDirections: `https://www.google.com/maps/dir/?api=1&destination=${SITE_DATA.coordinates.lat},${SITE_DATA.coordinates.lng}`,
-  googleMapsPlace: 'https://www.google.com/maps/search/?api=1&query=Jir%C3%B3n+Callao+126%2C+Cercado+de+Lima+15001',
-  wazeDirections: `https://waze.com/ul?ll=${SITE_DATA.coordinates.lat},${SITE_DATA.coordinates.lng}&navigate=yes`,
+  // Búsqueda por dirección postal en Google Maps (aclara que es búsqueda y no destino verificado)
+  googleMapsPlace:
+    'https://www.google.com/maps/search/?api=1&query=Jir%C3%B3n+Callao+126%2C+Cercado+de+Lima+15001',
+  googleMapsSearch:
+    'https://www.google.com/maps/search/?api=1&query=Jir%C3%B3n+Callao+126%2C+Cercado+de+Lima+15001',
+  // Enlaces punto a punto condicionados a coordenadas confirmadas
+  googleMapsDirections:
+    SITE_DATA.coordsVerified && SITE_DATA.coordinates
+      ? `https://www.google.com/maps/dir/?api=1&destination=${SITE_DATA.coordinates.lat},${SITE_DATA.coordinates.lng}`
+      : 'https://www.google.com/maps/search/?api=1&query=Jir%C3%B3n+Callao+126%2C+Cercado+de+Lima+15001',
+  wazeDirections:
+    SITE_DATA.coordsVerified && SITE_DATA.coordinates
+      ? `https://waze.com/ul?ll=${SITE_DATA.coordinates.lat},${SITE_DATA.coordinates.lng}&navigate=yes`
+      : null,
 };
 
 /**
@@ -131,78 +180,74 @@ export function getWhatsAppUrl(customMessage?: string): string {
 }
 
 /**
- * Catálogo de Membresías base (para presentación y fallback en modo demo/offline)
+ * Catálogo de Membresías base (sobrias, sin horarios repetidos ni afirmaciones comerciales no verificadas)
  */
 export const MEMBERSHIP_PLANS: PlanItem[] = [
   {
     id: 'mensual',
     title: 'Plan Mensual',
     period: '1 Mes',
-    priceNote: 'Consulta tarifa por WhatsApp',
-    description: 'Acceso total y continuo a sala de musculación, área cardiovascular y asesoría inicial.',
+    priceNote: 'Consultar precio',
+    description: 'Acceso a la sala de musculación, área cardiovascular y orientación de entrenamiento.',
     features: [
-      'Acceso en horario continuo L-V (6:00 a. m. a 11:00 p. m.)',
-      'Área completa de peso libre y poleas',
-      'Máquinas guiadas de musculación',
-      'Sector cardiovascular (cintas, elípticas, bicicletas)',
-      'Casilleros y vestuarios disponibles',
+      'Acceso a sala de musculación y pesas',
+      'Uso de máquinas cardiovasculares',
+      'Asesoría y orientación en sala',
+      'Casilleros para uso en el entrenamiento',
     ],
     ctaLabel: 'Consultar Plan Mensual',
-    whatsAppMessage: 'Hola Sumaq Center Gym, deseo consultar el precio y detalles del Plan Mensual.',
+    whatsAppMessage: 'Hola Sumaq Center Gym, deseo consultar el precio del Plan Mensual.',
   },
   {
     id: 'trimestral',
     title: 'Plan Trimestral',
     period: '3 Meses',
-    priceNote: 'Tarifa preferencial por trimestre',
+    priceNote: 'Consultar precio',
     isPopular: true,
-    description: 'La opción ideal para consolidar hábitos de entrenamiento y constancia con costo mensual reducido.',
+    description: 'Modalidad orientada a la continuidad del entrenamiento y consolidación de hábitos.',
     features: [
-      'Todos los beneficios del plan mensual',
-      'Descuento preferencial respecto al pago mensual',
-      'Evaluación y orientación de rutina básica',
-      'Acceso total en horario continuo sin restricciones',
-      'Congelamiento de membresía por viaje/salud (según condiciones)',
+      'Acceso a sala de musculación y pesas',
+      'Uso de máquinas cardiovasculares',
+      'Asesoría y orientación en sala',
+      'Casilleros para uso en el entrenamiento',
     ],
     ctaLabel: 'Consultar Plan Trimestral',
-    whatsAppMessage: 'Hola Sumaq Center Gym, me interesa el Plan Trimestral con tarifa preferencial.',
+    whatsAppMessage: 'Hola Sumaq Center Gym, me interesa consultar el Plan Trimestral.',
   },
   {
     id: 'semestral',
     title: 'Plan Semestral',
     period: '6 Meses',
-    priceNote: 'Mayor ahorro para entrenamiento sostenido',
-    description: 'Compromiso a mediano plazo para una transformación física tangible y disciplina deportiva.',
+    priceNote: 'Consultar precio',
+    description: 'Compromiso a mediano plazo para trabajo sostenido de fuerza y acondicionamiento.',
     features: [
-      'Todos los beneficios del plan trimestral',
-      'Tarifa mensual significativamente más económica',
-      'Seguimiento periódico de progreso',
-      'Prioridad en consulta de disponibilidad para clases funcionales',
-      'Opción de pase de cortesía para un invitado',
+      'Acceso a sala de musculación y pesas',
+      'Uso de máquinas cardiovasculares',
+      'Asesoría y orientación en sala',
+      'Casilleros para uso en el entrenamiento',
     ],
     ctaLabel: 'Consultar Plan Semestral',
-    whatsAppMessage: 'Hola Sumaq Center Gym, deseo consultar promociones y facilidades del Plan Semestral.',
+    whatsAppMessage: 'Hola Sumaq Center Gym, deseo consultar información del Plan Semestral.',
   },
   {
     id: 'anual',
     title: 'Plan Anual',
     period: '12 Meses',
-    priceNote: 'La inversión más rentable en tu salud',
-    description: 'Acceso ilimitado los 365 días para deportistas disciplinados que buscan el máximo valor por mes.',
+    priceNote: 'Consultar precio',
+    description: 'Modalidad de largo plazo para entrenamiento disciplinado a lo largo de todo el año.',
     features: [
-      'Máximo ahorro en tarifa por mes',
-      'Acceso irrestricto todo el año',
-      'Opción extendida de congelamiento de membresía',
-      'Kit de bienvenida o descuento en tienda de suplementos (sujeto a stock)',
-      'Pase de invitado mensual incluido',
+      'Acceso a sala de musculación y pesas',
+      'Uso de máquinas cardiovasculares',
+      'Asesoría y orientación en sala',
+      'Casilleros para uso en el entrenamiento',
     ],
     ctaLabel: 'Consultar Plan Anual',
-    whatsAppMessage: 'Hola Sumaq Center Gym, deseo consultar el precio especial y facilidades del Plan Anual.',
+    whatsAppMessage: 'Hola Sumaq Center Gym, deseo consultar el Plan Anual.',
   },
 ];
 
 /**
- * Catálogo de Clases y Disciplinas ofrecidas
+ * Catálogo de Clases y Disciplinas
  */
 export const GYM_CLASSES: ClassItem[] = [
   {
@@ -211,8 +256,8 @@ export const GYM_CLASSES: ClassItem[] = [
     category: 'Fuerza',
     intensity: 'Variable',
     durationMinutes: 60,
-    description: 'Entrenamiento orientado al desarrollo de masa muscular, fuerza funcional y acondicionamiento estructural con peso libre y poleas.',
-    scheduleText: 'Horario libre y continuo durante toda la jornada',
+    description: 'Entrenamiento orientado al desarrollo de masa muscular y acondicionamiento con peso libre y poleas.',
+    scheduleText: 'Disponible en sala',
     isFeatured: true,
   },
   {
@@ -221,8 +266,8 @@ export const GYM_CLASSES: ClassItem[] = [
     category: 'Acondicionamiento',
     intensity: 'Alta',
     durationMinutes: 45,
-    description: 'Circuitos dinámicos de cuerpo completo combinando resistencia metabólica, coordinación, agilidad y quema calórica eficiente.',
-    scheduleText: 'Turnos mañana y tarde (consultar horarios específicos)',
+    description: 'Circuitos dinámicos combinando movilidad, agilidad y potencia cardiovascular.',
+    scheduleText: 'Por confirmar',
     isFeatured: true,
   },
   {
@@ -231,68 +276,49 @@ export const GYM_CLASSES: ClassItem[] = [
     category: 'Cardiovascular',
     intensity: 'Media',
     durationMinutes: 45,
-    description: 'Zona cardiovascular equipada para optimizar la salud cardiovascular, resistencia pulmonar y control del porcentaje graso.',
-    scheduleText: 'Acceso continuo durante todo el horario de atención',
+    description: 'Equipamiento cardiovascular para resistencia aeróbica y condición física general.',
+    scheduleText: 'Disponible en sala',
     isFeatured: false,
   },
   {
-    id: 'spinning',
-    name: 'Ciclismo Indoor / Spinning',
-    category: 'Cardiovascular',
-    intensity: 'Alta',
+    id: 'grupales',
+    name: 'Clases Grupales y Talleres',
+    category: 'Grupales',
+    intensity: 'Variable',
     durationMinutes: 50,
-    description: 'Sesiones guiadas de alta cadencia y resistencia sobre bicicletas estacionarias para máxima resistencia y gasto energético.',
-    scheduleText: 'Sujeto a programación semanal (consultar disponibilidad)',
+    description: 'Sesiones dirigidas en grupo. Disciplinas y programación sujetas a confirmación.',
+    scheduleText: 'Por confirmar',
     isFeatured: false,
   },
 ];
 
 /**
- * Beneficios tangibles ofrecidos en la sede
+ * Beneficios Generales de la Sede
+ * NOTA: Los horarios NO se incluyen aquí para mantenerlos exclusivamente en el Footer.
  */
 export const GYM_BENEFITS: BenefitItem[] = [
   {
-    id: 'ubicacion-estrategica',
-    title: 'Ubicación Insuperable',
+    id: 'ubicacion',
+    title: 'Ubicación Céntrica en Lima',
+    description: 'En Jirón Callao 126, a pasos de la Plaza de Armas y con fácil conexión a avenidas Tacna y Abancay.',
     category: 'Ubicación',
-    description: 'En Jr. Callao 126, a solo una cuadra de la Plaza de Armas de Lima. Fácil llegada a pie o en transporte público céntrico.',
   },
   {
-    id: 'horario-extenso',
-    title: 'Horario Continuo Extenso',
+    id: 'enfoque',
+    title: 'Ambiente para Entrenar con Enfoque',
+    description: 'Espacio acondicionado para entrenar con disciplina y constancia en el centro histórico.',
     category: 'Instalaciones',
-    description: 'Entrena desde las 6:00 a. m. hasta las 11:00 p. m. de lunes a viernes, adaptado tanto a madrugadores como a quienes entrenan tras la jornada laboral.',
   },
   {
-    id: 'maquinas-completas',
-    title: 'Equipamiento Variado y Robusto',
+    id: 'equipamiento',
+    title: 'Zonas de Musculación y Cardio',
+    description: 'Máquinas de fuerza, barras olímpicas, mancuernas y equipos cardiovasculares para tus metas.',
     category: 'Equipamiento',
-    description: 'Variedad de mancuernas, barras olímpicas, bancadas de press, racks de sentadillas, poleas dobles y máquinas de palanca.',
   },
   {
-    id: 'comodidades',
-    title: 'Vestuarios y Casilleros',
-    category: 'Instalaciones',
-    description: 'Espacio higiénico y seguro para guardar pertenencias, cambiarte y prepararte para tu rutina diaria con tranquilidad.',
-  },
-  {
-    id: 'comunidad',
-    title: 'Ambiente de Disciplina y Respeto',
+    id: 'orientacion',
+    title: 'Orientación Básica en Sala',
+    description: 'Apoyo para resolver dudas sobre la correcta ejecución de ejercicios y uso de máquinas.',
     category: 'Asesoría',
-    description: 'Ambiente enfocado en el progreso deportivo auténtico, sin distracciones superficiales, apto para principiantes y avanzados.',
   },
 ];
-
-/**
- * Promoción de demostración para el modo prototipo (isDemoMode === true)
- * Nunca se muestra en producción real si la consulta de Sanity está vacía.
- */
-export const DEMO_PROMOTION = {
-  _id: 'demo-promo-01',
-  titulo: 'Membresías con Precio Especial de Apertura',
-  descripcion:
-    'Inscríbete hoy en Sumaq Center Gym y entrena con tarifa preferencial en todas nuestras áreas de musculación y cardio. Consulta disponibilidad de cupos directamente con nuestro equipo por WhatsApp.',
-  descuento: 'Campaña de Temporada',
-  textoBoton: 'Consultar Promoción por WhatsApp',
-  enlaceBoton: getWhatsAppUrl('Hola Sumaq Center Gym, quisiera consultar sobre la promoción de membresía especial de temporada.'),
-};

@@ -4,34 +4,30 @@ import { MapPin, Phone, ExternalLink, Navigation, Compass } from "lucide-react";
 import { InstagramIcon, FacebookIcon } from "@/components/ui/Icons";
 import { BadgeUnconfirmed } from "@/components/ui/BadgeUnconfirmed";
 import { FadeIn } from "@/components/ui/MotionWrapper";
+import { SITE_DATA, NAVIGATION_LINKS, getWhatsAppUrl } from "@/lib/data/site-data";
 import type { AjustesGenerales } from "@/lib/sanity/types";
 
 interface LocationContactSectionProps {
   settings?: AjustesGenerales | null;
 }
 
-const DEFAULT_MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=Jir%C3%B3n+Callao+126%2C+Cercado+de+Lima+15001";
-
 export function LocationContactSection({
   settings,
 }: LocationContactSectionProps) {
   const address =
-    settings?.direccion || "Jirón Callao 126, Cercado de Lima 15001";
+    settings?.direccion || SITE_DATA.address;
   const reference =
     settings?.pisoReferencia ||
-    "7.º piso (POR CONFIRMAR) • A pasos de la Plaza de Armas";
-  const whatsappNumber =
-    settings?.telefonoWhatsapp?.replace(/\D/g, "") || "51933596324";
-  const displayPhone = settings?.telefonoWhatsapp || "933 596 324";
+    `${SITE_DATA.floorReference} • ${SITE_DATA.reference}`;
+  const displayPhone = settings?.telefonoWhatsapp || SITE_DATA.phoneDisplay;
   const instagramUrl =
-    settings?.instagramUrl || "https://www.instagram.com/sumaqcentergym/";
+    settings?.instagramUrl || SITE_DATA.instagramUrl;
   const facebookUrl =
-    settings?.facebookUrl || "https://www.facebook.com/SumaqSumaqGYM/";
+    settings?.facebookUrl || SITE_DATA.facebookUrl;
 
-  const whatsappLocationUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+  const whatsappLocationUrl = getWhatsAppUrl(
     "Hola Sumaq Center Gym, quisiera saber cómo llegar al gimnasio."
-  )}`;
+  );
 
   return (
     <section id="ubicacion" className="py-20 lg:py-28 bg-[#F8F9F6] relative border-b border-[#DCE3DD]/60">
@@ -40,7 +36,7 @@ export function LocationContactSection({
           <SectionHeading
             badge="Sede & Contacto"
             title="En el Punto Más Accesible del Centro de Lima"
-            description="A pocas cuadras de la Plaza de Armas, Palacio de Gobierno e iglesias históricas. Fácil acceso peatonal y en transporte público."
+            description="A pocas cuadras de la Plaza de Armas y Palacio Municipal. Fácil acceso peatonal y en transporte público metropolitano."
           />
         </FadeIn>
 
@@ -48,7 +44,7 @@ export function LocationContactSection({
           {/* Tarjeta de Datos de Contacto y Referencias */}
           <div className="lg:col-span-5">
             <FadeIn direction="up" className="h-full">
-              <div className="h-full rounded-xl p-8 bg-[#FFFFFF] border border-[#DCE3DD] flex flex-col justify-between space-y-6 shadow-sm">
+              <div className="h-full p-8 rounded-xl bg-[#FFFFFF] border border-[#DCE3DD] flex flex-col justify-between space-y-6 shadow-sm">
                 <div className="space-y-6">
                   {/* Dirección */}
                   <div className="flex items-start gap-4">
@@ -57,71 +53,65 @@ export function LocationContactSection({
                     </div>
                     <div>
                       <span className="text-xs font-bold uppercase tracking-wider text-[#176B48] block">
-                        Dirección Principal
+                        Dirección
                       </span>
                       <p className="text-lg font-bold text-[#17211D] mt-0.5">
-                        {address.split(",")[0]}
+                        {address}
                       </p>
-                      <p className="text-xs text-[#526159]">
-                        {address.includes(",")
-                          ? address.split(",").slice(1).join(",")
-                          : "Cercado de Lima 15001, Perú"}
-                      </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-xs text-[#526159]">Piso y referencia:</span>
-                        <BadgeUnconfirmed size="sm" label="7.° PISO (POR CONFIRMAR)" />
+                      <span className="text-xs text-[#526159] block mt-0.5">
+                        Cercado de Lima 15001, Perú
+                      </span>
+                      <div className="mt-2">
+                        <BadgeUnconfirmed
+                          size="sm"
+                          label="UBICACIÓN EXACTA POR CONFIRMAR"
+                        />
                       </div>
                     </div>
                   </div>
 
-                  {/* Referencia Geográfica */}
-                  <div className="flex items-start gap-4">
+                  {/* Referencia */}
+                  <div className="flex items-start gap-4 pt-4 border-t border-[#DCE3DD]">
                     <div className="w-12 h-12 rounded-lg bg-[#E7F1E9] border border-[#DCE3DD] text-[#1E3A8A] flex items-center justify-center shrink-0">
                       <Compass className="w-6 h-6" />
                     </div>
                     <div>
                       <span className="text-xs font-bold uppercase tracking-wider text-[#1E3A8A] block">
-                        Punto de Referencia
+                        Piso y Referencia
                       </span>
                       <p className="text-sm font-semibold text-[#17211D] mt-0.5">
                         {reference}
                       </p>
-                      <p className="text-xs text-[#526159] mt-1 leading-relaxed">
-                        Cerca al Palacio Municipal, Club de la Unión y principales avenidas del damero central de Lima.
-                      </p>
                     </div>
                   </div>
 
-                  {/* Teléfono y WhatsApp */}
-                  <div className="flex items-start gap-4">
+                  {/* Teléfono / WhatsApp */}
+                  <div className="flex items-start gap-4 pt-4 border-t border-[#DCE3DD]">
                     <div className="w-12 h-12 rounded-lg bg-[#E7F1E9] border border-[#DCE3DD] text-[#176B48] flex items-center justify-center shrink-0">
                       <Phone className="w-6 h-6" />
                     </div>
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#176B48] block">
-                        Teléfono & WhatsApp
-                      </span>
-                      <div className="flex items-center gap-2 mt-1">
-                        <a
-                          href={whatsappLocationUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-base font-mono font-bold text-[#17211D] hover:text-[#176B48] transition-colors"
-                        >
-                          {displayPhone}
-                        </a>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#526159] block">
+                          WhatsApp / Teléfono
+                        </span>
                         <BadgeUnconfirmed size="sm" />
                       </div>
-                      <span className="text-xs text-[#526159] block mt-0.5">
-                        Atención directa a consultas y membresías
-                      </span>
+                      <a
+                        href={whatsappLocationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-base font-bold text-[#176B48] hover:underline mt-0.5 block"
+                      >
+                        {displayPhone}
+                      </a>
                     </div>
                   </div>
 
-                  {/* Redes Sociales Oficiales */}
+                  {/* Redes Sociales */}
                   <div className="pt-4 border-t border-[#DCE3DD]">
                     <span className="text-xs font-bold uppercase tracking-wider text-[#526159] block mb-3">
-                      Canales Oficiales
+                      Redes Sociales
                     </span>
                     <div className="flex flex-wrap gap-3">
                       <a
@@ -151,41 +141,39 @@ export function LocationContactSection({
 
                 <div className="pt-4">
                   <a
-                    href={DEFAULT_MAPS_URL}
+                    href={NAVIGATION_LINKS.googleMapsSearch}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#F8F9F6] hover:bg-[#E7F1E9] text-[#17211D] border border-[#DCE3DD] hover:border-[#176B48]/40 transition-all min-h-[44px]"
                   >
                     <Navigation className="w-4 h-4 text-[#176B48]" />
-                    <span>Abrir en Google Maps</span>
+                    <span>Buscar dirección en Google Maps</span>
                   </a>
                 </div>
               </div>
             </FadeIn>
           </div>
 
-          {/* Mapa Visual Limpio en Modalidad Diurna */}
+          {/* Estado de Ubicación */}
           <div className="lg:col-span-7">
             <FadeIn direction="up" delay={0.15} className="h-full">
-              <div className="h-full rounded-xl overflow-hidden border border-[#DCE3DD] relative min-h-[380px] bg-[#FFFFFF] shadow-sm">
-                <iframe
-                  title="Ubicación de Sumaq Center Gym en Cercado de Lima"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.9961621255747!2d-77.03450962493922!3d-12.04381804186591!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c8b598b98b9d%3A0x8670bc265e1eb04!2sJr.%20Callao%20126%2C%20Cercado%20de%20Lima%2015001!5e0!3m2!1ses!2spe!4v1700000000000!5m2!1ses!2spe"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, minHeight: "420px" }}
-                  allowFullScreen={false}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-full"
-                ></iframe>
-
-                <div className="absolute top-4 left-4 z-10 pointer-events-none">
-                  <div className="px-3.5 py-1.5 rounded-lg bg-[#FFFFFF]/95 backdrop-blur-md border border-[#DCE3DD] text-xs font-semibold text-[#17211D] flex items-center gap-2 shadow-sm">
-                    <span className="w-2 h-2 rounded-full bg-[#176B48]"></span>
-                    <span>Jr. Callao 126 • Cercado de Lima</span>
-                  </div>
-                </div>
+              <div className="h-full rounded-xl overflow-hidden border border-[#DCE3DD] relative min-h-[380px] bg-[#FFFFFF] shadow-sm flex flex-col items-center justify-center p-8 text-center">
+                <MapPin className="w-12 h-12 text-[#176B48] mb-3" />
+                <h3 className="text-base font-bold text-[#17211D] uppercase">
+                  {SITE_DATA.street}
+                </h3>
+                <p className="text-xs text-[#526159] mt-1 mb-4 max-w-md">
+                  {SITE_DATA.reference}. Coordenadas exactas pendientes de validación por la administración.
+                </p>
+                <a
+                  href={NAVIGATION_LINKS.googleMapsSearch}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#176B48] text-white hover:bg-[#105236] transition-all min-h-[44px]"
+                >
+                  <span>Buscar dirección en Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
             </FadeIn>
           </div>
